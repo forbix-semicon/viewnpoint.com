@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Blog index (blog/ is also the image asset directory).
+RewriteRule ^blog/?$ index.php [L]
+
+# If a file or directory exists, serve it directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route clean URLs to index.php (e.g., /views, /technology).
+RewriteRule ^ index.php [L]
