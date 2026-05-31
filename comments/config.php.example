@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+if (realpath((string) ($_SERVER["SCRIPT_FILENAME"] ?? "")) === realpath(__FILE__)) {
+    http_response_code(403);
+    header("Content-Type: text/plain; charset=UTF-8");
+    exit("Copy this file to config.php and open comments/admin.php for moderation.");
+}
+
+/**
+ * Copy to config.php and fill in your values.
+ * Do not commit config.php.
+ */
+return [
+    "admin_username" => "admin",
+    "admin_email" => "moderator@viewnpoint.com",
+    "admin_password" => "change-this-before-production",
+
+    "google_enabled" => true,
+    "google_client_id" => "your-google-client-id.apps.googleusercontent.com",
+    "google_client_secret" => "your-google-client-secret",
+    "google_redirect_uri" => "",
+
+    "facebook_enabled" => false,
+    "facebook_app_id" => "",
+    "facebook_app_secret" => "",
+    "facebook_redirect_uri" => "",
+];

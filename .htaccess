@@ -1,5 +1,8 @@
 RewriteEngine On
 
+# Block web access to database folder (sqlite, csv, backups).
+RewriteRule ^db(/.*)?$ - [F,L]
+
 # Blog index (blog/ is also the image asset directory).
 RewriteRule ^blog/?$ index.php [L]
 
@@ -8,5 +11,5 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Route clean URLs to index.php (e.g., /views, /technology).
+# Route clean URLs to index.php.
 RewriteRule ^ index.php [L]

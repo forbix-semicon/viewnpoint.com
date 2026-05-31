@@ -15,6 +15,8 @@ if ($requestPath === "//" || $requestPath === "") {
     $requestPath = "/";
 }
 
+require_once __DIR__ . "/comments/bootstrap.php";
+
 $software = [
     [
         "slug" => "tts",
@@ -583,10 +585,147 @@ function renderHeader(string $title, string $description, array $seo = []): void
             font-size: .94rem;
         }
 
+        .comments-box {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .comments-box h2 {
+            margin: 0 0 .45rem;
+            font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+        }
+
+        .comments-note,
+        .comments-empty {
+            color: var(--meta);
+            font-size: .92rem;
+        }
+
+        .comment-list {
+            display: grid;
+            gap: .8rem;
+            margin: 1rem 0;
+        }
+
+        .comment-item,
+        .comment-form {
+            border: 1px solid var(--border);
+            border-radius: .85rem;
+            background: var(--table-surface);
+            padding: 1rem;
+        }
+
+        .comment-item p {
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: var(--meta);
+            font-size: .86rem;
+            margin-bottom: .45rem;
+        }
+
+        .comment-auth-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comment-form {
+            display: grid;
+            gap: .55rem;
+        }
+
+        .comment-form h3 {
+            margin: 0 0 .25rem;
+        }
+
+        .comment-form label {
+            color: var(--article-strong);
+            font-weight: 700;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: .75rem;
+            padding: .75rem .85rem;
+            color: var(--text);
+            background: var(--surface);
+            font: inherit;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+        }
+
+        .comment-flash,
+        .comment-error {
+            border-radius: .8rem;
+            padding: .75rem .9rem;
+            margin: .8rem 0;
+            background: var(--table-title-bg);
+            color: var(--article-text);
+        }
+
+        .comment-flash-success {
+            border: 1px solid rgba(48, 213, 200, .4);
+        }
+
+        .comment-flash-error,
+        .comment-error {
+            border: 1px solid rgba(255, 110, 110, .5);
+        }
+
+        .link-button {
+            border: 0;
+            background: none;
+            color: var(--accent-2);
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+            text-decoration: underline;
+        }
+
+        .comment-oauth-row {
+            margin: 1rem 0 .5rem;
+        }
+
+        .btn-google {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            color: #fff;
+            background: #4285f4;
+            border: 1px solid #3367d6;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: .85rem;
+            padding: .72rem 1.05rem;
+        }
+
+        .btn-google:hover {
+            background: #3367d6;
+        }
+
+        .oauth-divider {
+            margin-bottom: .5rem;
+        }
+
         @media (max-width: 900px) {
             .col-6, .col-4 { grid-column: span 12; }
             .topbar { flex-wrap: wrap; padding: .6rem 0; }
             .topbar-actions { width: 100%; justify-content: space-between; }
+            .comment-auth-grid { grid-template-columns: 1fr; }
+            .comment-meta { display: block; }
         }
     </style>
 </head>
@@ -1006,6 +1145,7 @@ function renderParadoxPost(string $basePath, string $siteName, string $requestPa
             India does not lack talent. It lacks the courage to deploy that talent where it is most needed.
             The choice is simple: continue maintaining another country's legacy systems, or begin building our own future.
         </p>
+        <?php vp_render_comments($post, $basePath); ?>
     </article>
 </main>
 <?php
@@ -1298,6 +1438,7 @@ function renderVerticalTrapPost(string $basePath, string $siteName, string $requ
 
         <h2>Conclusion</h2>
         <p><strong>Development without planning is just expensive destruction.</strong></p>
+        <?php vp_render_comments($post, $basePath); ?>
     </article>
 </main>
 <?php

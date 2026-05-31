@@ -1,0 +1,22 @@
+# Secrets (never commit)
+comments/config.php
+comments/config.production.php
+
+# Database folder (created at runtime; ignore all contents)
+db/
+
+# OS and editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# Logs and temp
+*.log
+*.tmp
+*.bak
+
+# Unused local tools
+Remark42/
