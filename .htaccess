@@ -3,6 +3,9 @@ RewriteEngine On
 # Block web access to database folder (sqlite, csv, backups).
 RewriteRule ^db(/.*)?$ - [F,L]
 
+# Block direct access to markdown source files.
+RewriteRule ^content(/.*)?$ - [F,L]
+
 # Blog index (blog/ is also the image asset directory).
 RewriteRule ^blog/?$ index.php [L]
 

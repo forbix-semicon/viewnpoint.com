@@ -9,10 +9,23 @@ WEBSITE ARCHITECTURE
 - Clean URLs via .htaccess
 - Blog listing: /blog
 - Article pages: /article-slug (no physical file per article)
+- Article bodies: content/{slug}.md (Parsedown)
+- Post metadata: data/posts.php
 - blog/ folder holds images only
 - comments/ holds login, comments, moderation, Google OAuth
 - db/ holds SQLite database and backups
 - Public sees only approved comments
+
+
+ADDING A BLOG POST
+------------------
+
+1. Add metadata in data/posts.php (title, path, slug, excerpt, SEO, image, author, aliases).
+2. Create content/{slug}.md with the article body (Markdown + HTML tables OK).
+3. Put the hero image in blog/ and reference it in metadata.
+4. Add the canonical URL to sitemap.php.
+
+URLs stay as /your-long-slug. Short aliases (e.g. /rail-baltica) are optional in the aliases array.
 
 
 MAIN URLS
@@ -191,6 +204,10 @@ Upload these:
   robots.txt
   assets/                  (css, js)
   img/                     (logos, favicon)
+  data/posts.php
+  content/                 (*.md article bodies)
+  lib/Parsedown.php
+  includes/blog.php
   blog/                    (all images)
   comments/
     action.php

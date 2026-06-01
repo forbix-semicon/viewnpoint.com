@@ -26,6 +26,12 @@ $pages = [
         "priority" => "0.8",
     ],
     [
+        "loc" => $siteUrl . "/the-northern-link-why-a-railway-from-helsinki-to-warsaw-changes-everything",
+        "lastmod" => "2026-05-30",
+        "changefreq" => "monthly",
+        "priority" => "0.8",
+    ],
+    [
         "loc" => $siteUrl . "/the-vertical-trap-why-indias-development-is-heating-up-and-burning-out",
         "lastmod" => "2026-05-22",
         "changefreq" => "monthly",
