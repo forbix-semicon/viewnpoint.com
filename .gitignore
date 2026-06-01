@@ -20,3 +20,6 @@ desktop.ini
 
 # Unused local tools
 Remark42/
+
+# Local dev scripts (not for production)
+scripts/

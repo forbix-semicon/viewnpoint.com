@@ -1,0 +1,135 @@
+.section {
+    padding-bottom: 2.5rem;
+}
+
+.section-head {
+    margin-bottom: 1rem;
+}
+
+.section-head h2 {
+    margin: 0 0 .35rem;
+    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+    line-height: 1.2;
+}
+
+.section-head p {
+    margin: 0;
+    color: var(--muted);
+    max-width: 62ch;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.card {
+    grid-column: span 12;
+    background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-content { padding: 1.1rem; }
+.card h3 { margin: 0 0 .45rem; }
+.card p { margin: 0; color: var(--muted); }
+.col-6 { grid-column: span 6; }
+
+.card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.img-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+}
+
+.img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.meta {
+    display: block;
+    font-size: .82rem;
+    color: var(--meta);
+    margin-top: .45rem;
+}
+
+.editorial-grid {
+    display: grid;
+    gap: .85rem;
+}
+
+.editorial-card {
+    border: 1px solid var(--border);
+    border-radius: .95rem;
+    background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+    box-shadow: var(--shadow);
+}
+
+.editorial-card-link {
+    display: flex;
+    align-items: flex-start;
+    gap: .85rem;
+    padding: .85rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.editorial-thumb-wrap {
+    flex: 0 0 112px;
+    width: 112px;
+    height: 75px;
+    border-radius: .65rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.editorial-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.editorial-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.editorial-body h3 {
+    margin: 0 0 .35rem;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+.editorial-body p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .92rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media (max-width: 900px) {
+    .col-6 { grid-column: span 12; }
+}
+
+@media (min-width: 720px) {
+    .editorial-grid--multi {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

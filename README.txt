@@ -187,6 +187,10 @@ Upload these:
   index.php
   .htaccess
   router.php
+  sitemap.php
+  robots.txt
+  assets/                  (css, js)
+  img/                     (logos, favicon)
   blog/                    (all images)
   comments/
     action.php

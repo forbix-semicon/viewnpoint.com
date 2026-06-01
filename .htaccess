@@ -6,6 +6,9 @@ RewriteRule ^db(/.*)?$ - [F,L]
 # Blog index (blog/ is also the image asset directory).
 RewriteRule ^blog/?$ index.php [L]
 
+# Sitemap and robots for search engines.
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
 # If a file or directory exists, serve it directly.
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
@@ -13,3 +16,12 @@ RewriteRule ^ - [L]
 
 # Route clean URLs to index.php.
 RewriteRule ^ index.php [L]
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>

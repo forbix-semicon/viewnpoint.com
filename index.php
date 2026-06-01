@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 $siteName = "ViewNPoint";
-$siteTagline = "Attractive blog and software showcase for smart web tools.";
+$siteHomeTitle = "ViewNPoint — Practical Tools and Thoughtful Writing";
+$siteTagline = "Practical tools and thoughtful writing for thinkers, and curious minds.";
+$siteFooterTagline = $siteTagline;
 $basePath = rtrim(str_replace("\\", "/", dirname($_SERVER["SCRIPT_NAME"] ?? "")), "/");
 $requestPath = parse_url($_SERVER["REQUEST_URI"] ?? "/", PHP_URL_PATH) ?: "/";
 
@@ -45,7 +47,7 @@ $blogPosts = [
         "imageFallback" => "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
         "readTime" => "8 min read",
         "published" => "2026-05-22",
-        "author" => "JB",
+        "author" => "R Babu",
         "seoDescription" => "India's glass towers, commute chaos, and commercial rents are heating cities and burning out startups. Explore the vertical trap and what must change for hardware innovation.",
         "keywords" => "India urban development, glass buildings heat, startup rent Mumbai Bengaluru, hardware startups India, work life balance India, maker spaces India",
     ],
@@ -58,7 +60,7 @@ $blogPosts = [
         "image" => "/blog/the-paradox-of-progress-rethinking-indias-engineering-education.jpg",
         "readTime" => "6 min read",
         "published" => "2026-04-30",
-        "author" => "JB",
+        "author" => "Dharmesh Patnayak",
         "seoDescription" => "A data-backed look at India's engineering education shift, core branch decline, AI's role, and a roadmap for product-first innovation.",
         "keywords" => "India engineering education, core engineering decline, AI engineering India, IIT seat trends, hardware innovation India",
     ],
@@ -77,6 +79,23 @@ function url(string $path, string $basePath): string
 function assetUrl(string $path, string $basePath): string
 {
     return strpos($path, "http") === 0 ? $path : url($path, $basePath);
+}
+
+function assetVersion(string $relativePath): string
+{
+    $full = __DIR__ . $relativePath;
+
+    return is_file($full) ? (string) filemtime($full) : "1";
+}
+
+function stylesheetUrl(string $file, string $basePath): string
+{
+    return assetUrl("/assets/css/" . $file, $basePath) . "?v=" . assetVersion("/assets/css/" . $file);
+}
+
+function scriptUrl(string $file, string $basePath): string
+{
+    return assetUrl("/assets/js/" . $file, $basePath) . "?v=" . assetVersion("/assets/js/" . $file);
 }
 
 function siteOrigin(): string
@@ -159,20 +178,28 @@ function articleSeo(array $post, string $basePath, string $siteName): array
     ];
 }
 
-function renderHeader(string $title, string $description, array $seo = []): void
+function renderHeader(string $title, string $description, array $seo = [], string $pageStyle = "listing"): void
 {
+    global $basePath;
+
     $canonical = $seo["canonical"] ?? null;
     $ogType = $seo["og_type"] ?? "website";
     $ogImage = $seo["og_image"] ?? null;
     $keywords = $seo["keywords"] ?? "";
     $robots = $seo["robots"] ?? "index, follow";
     $jsonLd = $seo["json_ld"] ?? null;
+    $stylesheets = ["base.css"];
+    if ($pageStyle === "listing" || $pageStyle === "article") {
+        $stylesheets[] = "listing.css";
+    }
+    if ($pageStyle === "article") {
+        $stylesheets[] = "article.css";
+    }
     ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($title) ?></title>
     <meta name="description" content="<?= e($description) ?>">
@@ -192,6 +219,9 @@ function renderHeader(string $title, string $description, array $seo = []): void
     <?php if ($ogImage): ?>
     <meta property="og:image" content="<?= e($ogImage) ?>">
     <?php endif; ?>
+    <?php if ($ogImage && $pageStyle === "article"): ?>
+    <link rel="preload" as="image" href="<?= e($ogImage) ?>">
+    <?php endif; ?>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= e($seo["og_title"] ?? $title) ?>">
     <meta name="twitter:description" content="<?= e($seo["og_description"] ?? $description) ?>">
@@ -201,6 +231,12 @@ function renderHeader(string $title, string $description, array $seo = []): void
     <?php if ($jsonLd): ?>
     <script type="application/ld+json"><?= $jsonLd ?></script>
     <?php endif; ?>
+    <link rel="icon" href="<?= e(url("/img/favicon.ico", $basePath)) ?>" sizes="any">
+    <link rel="icon" type="image/png" href="<?= e(url("/img/favicon-light.png", $basePath)) ?>" sizes="32x32">
+    <link rel="apple-touch-icon" href="<?= e(url("/img/favicon-light.png", $basePath)) ?>">
+    <?php foreach ($stylesheets as $sheet): ?>
+    <link rel="stylesheet" href="<?= e(stylesheetUrl($sheet, $basePath)) ?>">
+    <?php endforeach; ?>
     <script>
         (function () {
             var key = "viewnpoint-theme";
@@ -209,561 +245,68 @@ function renderHeader(string $title, string $description, array $seo = []): void
             document.documentElement.setAttribute("data-theme", theme);
         })();
     </script>
-    <style>
-        [data-theme="dark"] {
-            --bg: #09090f;
-            --surface: #121420;
-            --text: #f7f8fb;
-            --muted: #a7b0c0;
-            --accent: #7c8cff;
-            --accent-2: #30d5c8;
-            --border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-            --header-bg: rgba(9, 9, 15, 0.75);
-            --glow-1: rgba(124, 140, 255, 0.35);
-            --glow-2: rgba(48, 213, 200, 0.22);
-            --card-top: rgba(255, 255, 255, 0.03);
-            --card-bottom: rgba(255, 255, 255, 0.01);
-            --badge-text: #dbeafe;
-            --badge-bg: rgba(124, 140, 255, 0.2);
-            --badge-border: rgba(124, 140, 255, 0.5);
-            --nav-active-text: #fff;
-            --btn-muted-text: #d9deeb;
-            --btn-muted-bg: rgba(255, 255, 255, 0.03);
-            --meta: #9aa8c3;
-            --article-text: #d6deef;
-            --article-byline: #9aa8c3;
-            --article-em: #f5d58d;
-            --article-strong: #ffffff;
-            --table-surface: rgba(255, 255, 255, 0.02);
-            --table-title-bg: rgba(124, 140, 255, 0.15);
-            --table-title-text: #f0f3ff;
-            --table-cell-border: rgba(255, 255, 255, 0.08);
-            --table-cell-text: #dde4f4;
-            --table-head-bg: rgba(48, 213, 200, 0.12);
-            --table-head-text: #f8fbff;
-            --table-note: #aeb9cd;
-            --toggle-track: rgba(255, 255, 255, 0.12);
-            --toggle-thumb: #f7f8fb;
-            --toggle-icon: #a7b0c0;
-        }
-
-        [data-theme="light"] {
-            --bg: #f3f5fb;
-            --surface: #ffffff;
-            --text: #121420;
-            --muted: #5a6478;
-            --accent: #5b6ee6;
-            --accent-2: #1fa89c;
-            --border: rgba(18, 20, 32, 0.12);
-            --shadow: 0 16px 40px rgba(18, 20, 32, 0.08);
-            --header-bg: rgba(255, 255, 255, 0.88);
-            --glow-1: rgba(91, 110, 230, 0.18);
-            --glow-2: rgba(31, 168, 156, 0.14);
-            --card-top: rgba(255, 255, 255, 0.95);
-            --card-bottom: rgba(243, 245, 251, 0.9);
-            --badge-text: #2f3f8f;
-            --badge-bg: rgba(91, 110, 230, 0.12);
-            --badge-border: rgba(91, 110, 230, 0.35);
-            --nav-active-text: #fff;
-            --btn-muted-text: #3a4558;
-            --btn-muted-bg: rgba(18, 20, 32, 0.04);
-            --meta: #6b778c;
-            --article-text: #3a4558;
-            --article-byline: #6b778c;
-            --article-em: #9a6b12;
-            --article-strong: #121420;
-            --table-surface: rgba(18, 20, 32, 0.03);
-            --table-title-bg: rgba(91, 110, 230, 0.1);
-            --table-title-text: #1e2a5c;
-            --table-cell-border: rgba(18, 20, 32, 0.08);
-            --table-cell-text: #3a4558;
-            --table-head-bg: rgba(31, 168, 156, 0.12);
-            --table-head-text: #123b36;
-            --table-note: #5a6478;
-            --toggle-track: rgba(18, 20, 32, 0.12);
-            --toggle-thumb: #ffffff;
-            --toggle-icon: #5a6478;
-        }
-
-        * { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; }
-        body {
-            font-family: "Inter", "Segoe UI", "Roboto", Arial, sans-serif;
-            background:
-                radial-gradient(circle at 10% -10%, var(--glow-1), transparent 45%),
-                radial-gradient(circle at 95% 10%, var(--glow-2), transparent 50%),
-                var(--bg);
-            color: var(--text);
-            line-height: 1.65;
-            transition: background-color .25s ease, color .25s ease;
-        }
-
-        .container {
-            width: min(1140px, calc(100% - 2rem));
-            margin-inline: auto;
-        }
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            backdrop-filter: blur(10px);
-            background: var(--header-bg);
-            border-bottom: 1px solid var(--border);
-            transition: background-color .25s ease, border-color .25s ease;
-        }
-
-        .topbar {
-            min-height: 72px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .topbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .theme-switch {
-            display: inline-flex;
-            align-items: center;
-            gap: .55rem;
-            cursor: pointer;
-            user-select: none;
-            flex-shrink: 0;
-        }
-
-        .theme-switch input {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-            pointer-events: none;
-        }
-
-        .theme-slider {
-            position: relative;
-            width: 52px;
-            height: 28px;
-            background: var(--toggle-track);
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            transition: background-color .2s ease, border-color .2s ease;
-        }
-
-        .theme-slider::before {
-            content: "";
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--toggle-thumb);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            transition: transform .2s ease;
-        }
-
-        .theme-switch input:checked + .theme-slider::before {
-            transform: translateX(24px);
-        }
-
-        .theme-icon {
-            font-size: 1rem;
-            line-height: 1;
-            color: var(--toggle-icon);
-        }
-
-        .brand {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: 0.04em;
-        }
-
-        nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .5rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--muted);
-            font-weight: 600;
-            padding: .5rem .9rem;
-            border-radius: 999px;
-            transition: .2s ease;
-        }
-
-        nav a:hover,
-        nav a.active {
-            color: var(--nav-active-text);
-            background: linear-gradient(90deg, var(--accent), var(--accent-2));
-        }
-
-        .hero {
-            padding: clamp(2.4rem, 7vw, 5.2rem) 0 2.2rem;
-        }
-
-        .badge {
-            display: inline-block;
-            font-size: .82rem;
-            font-weight: 700;
-            color: var(--badge-text);
-            background: var(--badge-bg);
-            border: 1px solid var(--badge-border);
-            padding: .35rem .7rem;
-            border-radius: 999px;
-        }
-
-        h1 {
-            margin: .9rem 0 0;
-            font-size: clamp(2rem, 5.2vw, 3.7rem);
-            line-height: 1.15;
-        }
-
-        .hero p {
-            margin-top: 1.05rem;
-            color: var(--muted);
-            max-width: 70ch;
-            font-size: 1.03rem;
-        }
-
-        .cta-row {
-            display: flex;
-            gap: .8rem;
-            flex-wrap: wrap;
-            margin-top: 1.4rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: .85rem;
-            padding: .72rem 1.05rem;
-        }
-
-        .btn-primary {
-            color: #fff;
-            background: linear-gradient(90deg, var(--accent), #9b68ff);
-        }
-
-        .btn-muted {
-            color: var(--btn-muted-text);
-            border: 1px solid var(--border);
-            background: var(--btn-muted-bg);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(12, minmax(0, 1fr));
-            gap: 1rem;
-            padding-bottom: 3rem;
-        }
-
-        .card {
-            grid-column: span 12;
-            background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
-        }
-
-        .card-content { padding: 1.1rem; }
-        .card h3 { margin: 0 0 .45rem; }
-        .card p { margin: 0; color: var(--muted); }
-        .col-6 { grid-column: span 6; }
-        .col-4 { grid-column: span 4; }
-
-        .img-wrap {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            overflow: hidden;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .img-wrap.trimmed {
-            aspect-ratio: 18 / 7;
-        }
-
-        .meta {
-            display: block;
-            font-size: .82rem;
-            color: var(--meta);
-            margin-top: .5rem;
-        }
-
-        .article {
-            margin-bottom: 3rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: clamp(1.2rem, 3vw, 2rem);
-            transition: background-color .25s ease, border-color .25s ease;
-        }
-
-        .article h1 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin-bottom: .3rem; }
-        .article h2 { margin-top: 2rem; margin-bottom: .65rem; font-size: clamp(1.25rem, 2.2vw, 1.6rem); }
-        .article p { color: var(--article-text); margin: 0 0 1rem; text-align: justify; }
-        .article .byline { color: var(--article-byline); font-size: .92rem; margin-bottom: 1.2rem; }
-        .article .section-break {
-            border: 0;
-            border-top: 1px solid var(--border);
-            margin: 1.3rem 0 1.4rem;
-        }
-        .article ul { margin: 0 0 1rem 1.2rem; padding: 0; }
-        .article li { margin-bottom: .6rem; color: var(--article-text); text-align: justify; }
-        .article em { color: var(--article-em); }
-        .article strong { color: var(--article-strong); }
-
-        .table-card {
-            margin: 1rem 0 1.25rem;
-            border: 1px solid var(--border);
-            border-radius: .8rem;
-            overflow: hidden;
-            background: var(--table-surface);
-        }
-
-        .table-title {
-            margin: 0;
-            padding: .8rem 1rem;
-            background: var(--table-title-bg);
-            color: var(--table-title-text);
-            font-size: .98rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .table-wrap { overflow-x: auto; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 680px;
-        }
-
-        th, td {
-            text-align: left;
-            padding: .72rem .8rem;
-            border-bottom: 1px solid var(--table-cell-border);
-            color: var(--table-cell-text);
-            vertical-align: top;
-        }
-
-        th {
-            background: var(--table-head-bg);
-            color: var(--table-head-text);
-            font-size: .92rem;
-        }
-
-        .table-note {
-            color: var(--table-note);
-            font-size: .9rem;
-            margin-top: .5rem;
-            text-align: justify;
-        }
-
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 1.1rem 0 2rem;
-            color: var(--muted);
-            font-size: .94rem;
-        }
-
-        .comments-box {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .comments-box h2 {
-            margin: 0 0 .45rem;
-            font-size: clamp(1.25rem, 2.2vw, 1.6rem);
-        }
-
-        .comments-note,
-        .comments-empty {
-            color: var(--meta);
-            font-size: .92rem;
-        }
-
-        .comment-list {
-            display: grid;
-            gap: .8rem;
-            margin: 1rem 0;
-        }
-
-        .comment-item,
-        .comment-form {
-            border: 1px solid var(--border);
-            border-radius: .85rem;
-            background: var(--table-surface);
-            padding: 1rem;
-        }
-
-        .comment-item p {
-            margin-bottom: 0;
-            text-align: left;
-        }
-
-        .comment-meta {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            color: var(--meta);
-            font-size: .86rem;
-            margin-bottom: .45rem;
-        }
-
-        .comment-auth-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .comment-form {
-            display: grid;
-            gap: .55rem;
-        }
-
-        .comment-form h3 {
-            margin: 0 0 .25rem;
-        }
-
-        .comment-form label {
-            color: var(--article-strong);
-            font-weight: 700;
-        }
-
-        .comment-form input,
-        .comment-form textarea {
-            width: 100%;
-            border: 1px solid var(--border);
-            border-radius: .75rem;
-            padding: .75rem .85rem;
-            color: var(--text);
-            background: var(--surface);
-            font: inherit;
-        }
-
-        .comment-form textarea {
-            resize: vertical;
-        }
-
-        .comment-flash,
-        .comment-error {
-            border-radius: .8rem;
-            padding: .75rem .9rem;
-            margin: .8rem 0;
-            background: var(--table-title-bg);
-            color: var(--article-text);
-        }
-
-        .comment-flash-success {
-            border: 1px solid rgba(48, 213, 200, .4);
-        }
-
-        .comment-flash-error,
-        .comment-error {
-            border: 1px solid rgba(255, 110, 110, .5);
-        }
-
-        .link-button {
-            border: 0;
-            background: none;
-            color: var(--accent-2);
-            cursor: pointer;
-            font: inherit;
-            padding: 0;
-            text-decoration: underline;
-        }
-
-        .comment-oauth-row {
-            margin: 1rem 0 .5rem;
-        }
-
-        .btn-google {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: .5rem;
-            color: #fff;
-            background: #4285f4;
-            border: 1px solid #3367d6;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: .85rem;
-            padding: .72rem 1.05rem;
-        }
-
-        .btn-google:hover {
-            background: #3367d6;
-        }
-
-        .oauth-divider {
-            margin-bottom: .5rem;
-        }
-
-        @media (max-width: 900px) {
-            .col-6, .col-4 { grid-column: span 12; }
-            .topbar { flex-wrap: wrap; padding: .6rem 0; }
-            .topbar-actions { width: 100%; justify-content: space-between; }
-            .comment-auth-grid { grid-template-columns: 1fr; }
-            .comment-meta { display: block; }
-        }
-    </style>
 </head>
 <body>
 <?php
 }
 
+function renderBrandMark(string $basePath, string $siteName, ?string $href = null): void
+{
+    $tag = $href !== null ? "a" : "div";
+    $attrs = $href !== null
+        ? ' class="brand" href="' . e(url("/", $basePath)) . '"'
+        : ' class="brand brand--static"';
+    ?>
+    <<?= $tag ?><?= $attrs ?>>
+        <img class="brand-logo brand-logo--dark-theme" src="<?= e(url("/img/viewnpoint-logo-white.png", $basePath)) ?>" width="42" height="42" alt="" decoding="async" fetchpriority="high">
+        <img class="brand-logo brand-logo--light-theme" src="<?= e(url("/img/viewnpoint-logo-dark.png", $basePath)) ?>" width="42" height="42" alt="" decoding="async">
+        <span class="brand-name"><?= e($siteName) ?></span>
+    <<?= $tag ?>>
+    <?php
+}
+
 function renderFooter(): void
 {
+    global $basePath, $siteName, $siteFooterTagline;
     ?>
 <footer>
-    <div class="container">ViewNPoint - Blog and software updates. More tools and posts are coming soon.</div>
+    <div class="container footer-inner">
+        <?php renderBrandMark($basePath, $siteName, "/"); ?>
+        <p class="footer-tagline">
+            <?= e($siteFooterTagline) ?>
+            · <a class="footer-link" href="https://www.forbixindia.com" rel="noopener noreferrer">FORBIX SEMICON</a>
+        </p>
+    </div>
 </footer>
-<script>
-(function () {
-    var key = "viewnpoint-theme";
-    var root = document.documentElement;
-    var toggle = document.getElementById("theme-toggle");
-    if (!toggle) return;
-
-    function apply(theme) {
-        root.setAttribute("data-theme", theme);
-        var isDark = theme === "dark";
-        toggle.checked = isDark;
-        toggle.setAttribute("aria-checked", isDark ? "true" : "false");
-        localStorage.setItem(key, theme);
-    }
-
-    toggle.addEventListener("change", function () {
-        apply(toggle.checked ? "dark" : "light");
-    });
-
-    apply(root.getAttribute("data-theme") || "dark");
-})();
-</script>
+<script src="<?= e(scriptUrl("theme.js", $basePath)) ?>" defer></script>
 </body>
 </html>
 <?php
+}
+
+function renderBlogEditorialCard(array $post, string $basePath, bool $lazyImage = true): void
+{
+    $href = url($post["path"], $basePath);
+    $img = blogPostImage($post, $basePath);
+    $imgAttrs = $lazyImage ? ' loading="lazy" decoding="async"' : ' decoding="async"';
+    ?>
+    <article class="editorial-card">
+        <a class="editorial-card-link" href="<?= e($href) ?>">
+            <?php if ($img !== ""): ?>
+            <span class="editorial-thumb-wrap">
+                <img class="editorial-thumb" src="<?= e($img) ?>" alt="" width="112" height="75"<?= $imgAttrs ?>>
+            </span>
+            <?php endif; ?>
+            <span class="editorial-body">
+                <h3><?= e($post["title"]) ?></h3>
+                <p><?= e($post["excerpt"]) ?></p>
+                <?php if (!empty($post["readTime"])): ?>
+                <span class="meta"><?= e($post["readTime"]) ?></span>
+                <?php endif; ?>
+            </span>
+        </a>
+    </article>
+    <?php
 }
 
 function isActive(string $requestPath, string $target): bool
@@ -776,7 +319,7 @@ function renderNav(string $basePath, string $requestPath, string $siteName): voi
     ?>
 <header>
     <div class="container topbar">
-        <a class="brand" href="<?= e(url("/", $basePath)) ?>"><?= e($siteName) ?></a>
+        <?php renderBrandMark($basePath, $siteName, "/"); ?>
         <div class="topbar-actions">
             <label class="theme-switch" for="theme-toggle" title="Toggle light and dark mode">
                 <span class="theme-icon" aria-hidden="true">☀</span>
@@ -795,55 +338,57 @@ function renderNav(string $basePath, string $requestPath, string $siteName): voi
 <?php
 }
 
-function renderHome(string $basePath, string $siteName, string $siteTagline, array $software, array $blogPosts, string $requestPath): void
+function renderHome(string $basePath, string $siteName, string $siteHomeTitle, string $siteTagline, array $software, array $blogPosts, string $requestPath): void
 {
-    renderHeader($siteName . " | Home", $siteTagline);
+    renderHeader($siteHomeTitle, $siteTagline);
     renderNav($basePath, $requestPath, $siteName);
     ?>
 <main class="container">
     <section class="hero">
         <span class="badge">ViewNPoint</span>
-        <h1>Your destination for practical software and thoughtful blog content.</h1>
-        <p>
-            Discover useful tools, fast insights, and clear writing. Start with our featured software:
-            TTS and Website Rank Checker. New software products and fresh blog posts will be added soon.
-        </p>
+        <h1>Practical software and thoughtful writing for curious minds.</h1>
+        <p><?= e($siteTagline) ?></p>
         <div class="cta-row">
-            <a class="btn btn-primary" href="<?= e(url("/tech", $basePath)) ?>">Explore Technology</a>
-            <a class="btn btn-muted" href="<?= e(url("/blog", $basePath)) ?>">Read Blog</a>
+            <a class="btn btn-primary" href="<?= e(url("/blog", $basePath)) ?>">Read Editorials</a>
+            <a class="btn btn-muted" href="<?= e(url("/tech", $basePath)) ?>">Explore Software</a>
         </div>
     </section>
 
-    <section class="grid">
+    <section class="section">
+        <div class="section-head">
+            <h2>Featured Editorials</h2>
+            <p>Essays on engineering, urban development, and innovation in India.</p>
+        </div>
+        <div class="editorial-grid editorial-grid--multi">
+            <?php foreach ($blogPosts as $post): ?>
+                <?php renderBlogEditorialCard($post, $basePath); ?>
+            <?php endforeach; ?>
+        </div>
+        <div class="cta-row">
+            <a class="btn btn-muted" href="<?= e(url("/blog", $basePath)) ?>">All Blog Posts</a>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-head">
+            <h2>Featured Software</h2>
+            <p>Useful web tools to make digital work easier.</p>
+        </div>
+        <div class="grid">
         <?php foreach ($software as $item): ?>
             <article class="card col-6">
                 <a href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($item["title"]) ?>">
                     <div class="img-wrap">
-                        <img src="<?= e(strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath)) ?>" alt="<?= e($item["title"]) ?>">
+                        <img src="<?= e(strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath)) ?>" alt="<?= e($item["title"]) ?>" width="640" height="360" loading="lazy" decoding="async">
                     </div>
                 </a>
                 <div class="card-content">
-                    <h3><a href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;"><?= e($item["title"]) ?></a></h3>
+                    <h3><a class="card-link" href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer"><?= e($item["title"]) ?></a></h3>
                     <p><?= e($item["description"]) ?></p>
-                    <span class="meta">Featured software</span>
                 </div>
             </article>
         <?php endforeach; ?>
-
-        <article class="card col-12">
-            <div class="card-content">
-                <h3>Featured Editorials</h3>
-                <p>
-                    Read <strong><?= e($blogPosts[0]["title"]) ?></strong> and
-                    <strong><?= e($blogPosts[1]["title"] ?? $blogPosts[0]["title"]) ?></strong>—essays on urban burnout,
-                    hardware startups, and engineering education in India.
-                </p>
-                <div class="cta-row">
-                    <a class="btn btn-primary" href="<?= e(url($blogPosts[0]["path"], $basePath)) ?>">Latest Article</a>
-                    <a class="btn btn-muted" href="<?= e(url("/blog", $basePath)) ?>">All Blog Posts</a>
-                </div>
-            </div>
-        </article>
+        </div>
     </section>
 </main>
 <?php
@@ -866,11 +411,11 @@ function renderSoftwarePage(string $basePath, string $siteName, array $software,
             <article class="card col-6">
                 <a href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($item["title"]) ?>">
                     <div class="img-wrap">
-                        <img src="<?= e(strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath)) ?>" alt="<?= e($item["title"]) ?>">
+                        <img src="<?= e(strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath)) ?>" alt="<?= e($item["title"]) ?>" width="640" height="360" loading="lazy" decoding="async">
                     </div>
                 </a>
                 <div class="card-content">
-                    <h3><a href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;"><?= e($item["title"]) ?></a></h3>
+                    <h3><a class="card-link" href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer"><?= e($item["title"]) ?></a></h3>
                     <p><?= e($item["description"]) ?></p>
                 </div>
             </article>
@@ -899,33 +444,14 @@ function renderBlogPage(string $basePath, string $siteName, array $blogPosts, st
     <section class="hero">
         <span class="badge">Blog</span>
         <h1>Thoughtful writing on engineering, innovation, and technology.</h1>
-        <p>Explore concise snapshots of our latest posts and open the full article for complete reading.</p>
+        <p>Short previews of each post — open any article for the full read.</p>
     </section>
-    <section class="grid">
+    <section class="section">
+        <div class="editorial-grid">
         <?php foreach ($blogPosts as $post): ?>
-            <article class="card col-12">
-                <a href="<?= e(url($post["path"], $basePath)) ?>" aria-label="<?= e($post["title"]) ?>">
-                    <div class="img-wrap trimmed">
-                        <img src="<?= e(blogPostImage($post, $basePath)) ?>" alt="Snapshot image for <?= e($post["title"]) ?>">
-                    </div>
-                </a>
-                <div class="card-content">
-                    <h3>
-                        <a href="<?= e(url($post["path"], $basePath)) ?>" style="color:inherit; text-decoration:none;">
-                            <?= e($post["title"]) ?>
-                        </a>
-                    </h3>
-                    <p><?= e($post["excerpt"]) ?></p>
-                    <?php if (!empty($post["snapshot"])): ?>
-                        <p><strong>Snapshot:</strong> <?= e($post["snapshot"]) ?></p>
-                    <?php endif; ?>
-                    <span class="meta"><?= e($post["readTime"]) ?></span>
-                    <div class="cta-row">
-                        <a class="btn btn-primary" href="<?= e(url($post["path"], $basePath)) ?>">Read Post</a>
-                    </div>
-                </div>
-            </article>
+            <?php renderBlogEditorialCard($post, $basePath); ?>
         <?php endforeach; ?>
+        </div>
     </section>
 </main>
 <?php
@@ -938,7 +464,8 @@ function renderParadoxPost(string $basePath, string $siteName, string $requestPa
     renderHeader(
         $post["title"] . " | " . $siteName,
         $post["seoDescription"] ?? $post["excerpt"],
-        articleSeo($post, $basePath, $siteName)
+        articleSeo($post, $basePath, $siteName),
+        "article"
     );
     renderNav($basePath, $requestPath, $siteName);
     ?>
@@ -950,8 +477,8 @@ function renderParadoxPost(string $basePath, string $siteName, string $requestPa
     </section>
 
     <article class="article" itemscope itemtype="https://schema.org/Article">
-        <div class="img-wrap" style="margin-bottom: 1rem; border: 1px solid var(--border); border-radius: .85rem;">
-            <img src="<?= e(blogPostImage($post, $basePath)) ?>" alt="<?= e($post["title"]) ?>" itemprop="image">
+        <div class="img-wrap article-hero-image">
+            <img src="<?= e(blogPostImage($post, $basePath)) ?>" alt="<?= e($post["title"]) ?>" itemprop="image" width="1140" height="641" fetchpriority="high" decoding="async">
         </div>
 
         <h1 itemprop="headline"><?= e($post["title"]) ?></h1>
@@ -1158,7 +685,8 @@ function renderVerticalTrapPost(string $basePath, string $siteName, string $requ
     renderHeader(
         $post["title"] . " | " . $siteName,
         $post["seoDescription"] ?? $post["excerpt"],
-        articleSeo($post, $basePath, $siteName)
+        articleSeo($post, $basePath, $siteName),
+        "article"
     );
     renderNav($basePath, $requestPath, $siteName);
     ?>
@@ -1170,8 +698,8 @@ function renderVerticalTrapPost(string $basePath, string $siteName, string $requ
     </section>
 
     <article class="article" itemscope itemtype="https://schema.org/Article">
-        <div class="img-wrap" style="margin-bottom: 1rem; border: 1px solid var(--border); border-radius: .85rem;">
-            <img src="<?= e(blogPostImage($post, $basePath)) ?>" alt="<?= e($post["title"]) ?>" itemprop="image">
+        <div class="img-wrap article-hero-image">
+            <img src="<?= e(blogPostImage($post, $basePath)) ?>" alt="<?= e($post["title"]) ?>" itemprop="image" width="1140" height="641" fetchpriority="high" decoding="async">
         </div>
 
         <h1 itemprop="headline"><?= e($post["title"]) ?></h1>
@@ -1463,7 +991,7 @@ function renderNotFound(string $basePath, string $siteName, string $requestPath)
 }
 
 if ($requestPath === "/") {
-    renderHome($basePath, $siteName, $siteTagline, $software, $blogPosts, $requestPath);
+    renderHome($basePath, $siteName, $siteHomeTitle, $siteTagline, $software, $blogPosts, $requestPath);
     exit;
 }
 
