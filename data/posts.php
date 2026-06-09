@@ -6,6 +6,22 @@ declare(strict_types=1);
  */
 return [
     [
+        "slug" => "jobs-ai-could-hijack-starting-2026-careers-still-safe",
+        "title" => "Jobs AI Could Hijack Starting in 2026—and the Careers That Are Still Safe",
+        "path" => "/jobs-ai-could-hijack-starting-2026-careers-still-safe",
+        "excerpt" => "Which roles AI could take over from 2026 onwards—from QA and helpdesk to RTL and data entry—and which careers are still safe, by country, industry, and skill.",
+        "snapshot" => "Country-by-country look at AI-linked job cuts and forecasts, plus detailed tables on semiconductor, software, and non-tech roles—and what stays comparatively safe.",
+        "image" => "/blog/jobs-ai-could-hijack-starting-2026-careers-still-safe.jpg",
+        "imageFallback" => "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80",
+        "readTime" => "18 min read",
+        "published" => "2026-05-30",
+        "author" => "Senthil & Ian",
+        "heroBadge" => "Work & Technology",
+        "heroSubheading" => "From 2026 onward, testers, support agents, and junior developers are on the front line. Chip bring-up engineers, nurses, and client-facing architects are still safer—for now.",
+        "seoDescription" => "Jobs AI could hijack starting in 2026 vs careers that are still safe: Oracle, Meta, and India IT layoffs, color-coded job-risk tables for RTL, verification, backend, QA, and non-tech roles by country.",
+        "keywords" => "jobs AI could hijack, AI safe careers 2026, jobs AI might replace, careers still safe from AI, Oracle layoffs, India IT layoffs, job risk by role, semiconductor verification AI",
+    ],
+    [
         "slug" => "rail-baltica",
         "title" => "The Northern Link: Why a Railway from Helsinki to Warsaw Changes Everything",
         "path" => "/the-northern-link-why-a-railway-from-helsinki-to-warsaw-changes-everything",

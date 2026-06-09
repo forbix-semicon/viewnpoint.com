@@ -26,6 +26,12 @@ $pages = [
         "priority" => "0.8",
     ],
     [
+        "loc" => $siteUrl . "/jobs-ai-could-hijack-starting-2026-careers-still-safe",
+        "lastmod" => "2026-05-30",
+        "changefreq" => "monthly",
+        "priority" => "0.8",
+    ],
+    [
         "loc" => $siteUrl . "/the-northern-link-why-a-railway-from-helsinki-to-warsaw-changes-everything",
         "lastmod" => "2026-05-30",
         "changefreq" => "monthly",
