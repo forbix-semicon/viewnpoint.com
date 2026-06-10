@@ -136,6 +136,26 @@ th {
 
 td.risk-cell { min-width: 7.5rem; }
 
+.pull-quote {
+    margin: 1.25rem 0;
+    padding: 1rem 1.15rem;
+    border-left: 4px solid var(--accent);
+    background: var(--table-surface);
+    border-radius: 0 .75rem .75rem 0;
+    color: var(--article-text);
+    font-size: 1.02rem;
+    line-height: 1.55;
+    text-align: left;
+}
+
+.pull-quote cite {
+    display: block;
+    margin-top: .55rem;
+    font-size: .86rem;
+    color: var(--table-note);
+    font-style: normal;
+}
+
 .comments-box {
     margin-top: 2rem;
     padding-top: 1.5rem;

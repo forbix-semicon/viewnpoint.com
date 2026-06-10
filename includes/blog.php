@@ -65,7 +65,7 @@ function renderArticle(string $basePath, string $siteName, string $requestPath, 
 <main class="container">
     <section class="hero">
         <span class="badge"><?= e($heroBadge) ?></span>
-        <h1><?= e($post["title"]) ?></h1>
+        <h1 itemprop="headline"><?= e($post["title"]) ?></h1>
         <?php if ($heroLead !== ""): ?>
         <p><?= $heroLeadIsHtml ? "<em>" . e($heroLead) . "</em>" : e($heroLead) ?></p>
         <?php endif; ?>
@@ -75,8 +75,6 @@ function renderArticle(string $basePath, string $siteName, string $requestPath, 
         <div class="img-wrap article-hero-image">
             <img src="<?= e(blogPostImage($post, $basePath)) ?>" alt="<?= e($post["title"]) ?>" itemprop="image" width="1140" height="641" fetchpriority="high" decoding="async">
         </div>
-
-        <h1 itemprop="headline"><?= e($post["title"]) ?></h1>
         <p class="byline"><strong>Written by <?= e($post["author"] ?? "ViewNPoint") ?></strong> · <em>Published: <time itemprop="datePublished" datetime="<?= e($post["published"] ?? "") ?>"><?= e(date("j F Y", strtotime($post["published"] ?? "now"))) ?></time></em></p>
 
         <?= blogPostBodyHtml($post) ?>

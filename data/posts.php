@@ -13,7 +13,7 @@ return [
         "snapshot" => "Country-by-country look at AI-linked job cuts and forecasts, plus detailed tables on semiconductor, software, and non-tech roles—and what stays comparatively safe.",
         "image" => "/blog/jobs-ai-could-hijack-starting-2026-careers-still-safe.jpg",
         "imageFallback" => "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80",
-        "readTime" => "18 min read",
+        "readTime" => "16 min read",
         "published" => "2026-05-30",
         "author" => "Senthil & Ian",
         "heroBadge" => "Work & Technology",
