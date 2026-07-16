@@ -6,6 +6,24 @@ declare(strict_types=1);
  */
 return [
     [
+        "slug" => "hearing-frequency-and-biological-age",
+        "title" => "Hearing Frequency and Biological Age: What Your Ears Reveal",
+        "path" => "/hearing-frequency-and-biological-age",
+        "excerpt" => "Mark the highest tone you can still hear, get a rough biological / ear-age estimate, and see how city noise pulls that number ahead of your birthday.",
+        "snapshot" => "Interactive sine-wave lab plus a data-backed chart of audible frequency vs age — share your result and retest in a few days.",
+        "image" => "/blog/hearing-frequency-and-biological-age.jpg",
+        "readTime" => "8 min read",
+        "published" => "2026-07-16",
+        "author" => "Jerry Thomas",
+        "heroBadge" => "Hearing & Biological Age",
+        "heroSubheading" => "Your high-frequency ceiling is a quiet clock. Test it here — then see what years of traffic and headphones may already have taken.",
+        "seoDescription" => "Hearing frequency test for biological age: play a sine wave, mark the highest tone you hear, see ear-age estimate, chart of frequency vs age, and research on city noise.",
+        "keywords" => "hearing frequency biological age, ear age test, audible frequency vs age, hearing test online, city noise hearing loss, sine wave hearing test",
+        "styles" => ["hearing-test.css"],
+        "scripts" => ["hearing-test.js"],
+        "hideHeroImage" => true,
+    ],
+    [
         "slug" => "jobs-ai-could-hijack-starting-2026-careers-still-safe",
         "title" => "Jobs AI Could Hijack Starting in 2026—and the Careers That Are Still Safe",
         "path" => "/jobs-ai-could-hijack-starting-2026-careers-still-safe",

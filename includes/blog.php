@@ -53,12 +53,15 @@ function renderArticle(string $basePath, string $siteName, string $requestPath, 
     $heroBadge = $post["heroBadge"] ?? "Blog Post";
     $heroLead = $post["heroSubheading"] ?? ($post["excerpt"] ?? "");
     $heroLeadIsHtml = !empty($post["heroSubheading"]);
+    $extraStyles = $post["styles"] ?? [];
+    $extraScripts = $post["scripts"] ?? [];
 
     renderHeader(
         $post["title"] . " | " . $siteName,
         $post["seoDescription"] ?? ($post["excerpt"] ?? ""),
         articleSeo($post, $basePath, $siteName),
-        "article"
+        "article",
+        $extraStyles
     );
     renderNav($basePath, $requestPath, $siteName);
     ?>
@@ -72,9 +75,11 @@ function renderArticle(string $basePath, string $siteName, string $requestPath, 
     </section>
 
     <article class="article" itemscope itemtype="https://schema.org/Article">
+        <?php if (empty($post["hideHeroImage"])): ?>
         <div class="img-wrap article-hero-image">
             <img src="<?= e(blogPostImage($post, $basePath)) ?>" alt="<?= e($post["title"]) ?>" itemprop="image" width="1140" height="641" fetchpriority="high" decoding="async">
         </div>
+        <?php endif; ?>
         <p class="byline"><strong>Written by <?= e($post["author"] ?? "ViewNPoint") ?></strong> · <em>Published: <time itemprop="datePublished" datetime="<?= e($post["published"] ?? "") ?>"><?= e(date("j F Y", strtotime($post["published"] ?? "now"))) ?></time></em></p>
 
         <?= blogPostBodyHtml($post) ?>
@@ -82,5 +87,5 @@ function renderArticle(string $basePath, string $siteName, string $requestPath, 
     </article>
 </main>
 <?php
-    renderFooter();
+    renderFooter($extraScripts);
 }

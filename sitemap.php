@@ -26,6 +26,12 @@ $pages = [
         "priority" => "0.8",
     ],
     [
+        "loc" => $siteUrl . "/hearing-frequency-and-biological-age",
+        "lastmod" => "2026-07-16",
+        "changefreq" => "monthly",
+        "priority" => "0.9",
+    ],
+    [
         "loc" => $siteUrl . "/jobs-ai-could-hijack-starting-2026-careers-still-safe",
         "lastmod" => "2026-05-30",
         "changefreq" => "monthly",

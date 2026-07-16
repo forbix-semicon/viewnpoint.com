@@ -22,6 +22,13 @@ require_once __DIR__ . "/includes/blog.php";
 
 $software = [
     [
+        "slug" => "hearing-frequency-lab",
+        "title" => "Hearing Frequency Lab",
+        "path" => "/hearing-frequency-and-biological-age",
+        "description" => "Test the highest tone you can hear and get a rough biological / ear-age estimate — then share your result.",
+        "image" => "/blog/hearing-frequency-and-biological-age.jpg",
+    ],
+    [
         "slug" => "tts",
         "title" => "Text To Speech (TTS)",
         "path" => "https://viewnpoint.com/software/tts/",
@@ -140,7 +147,7 @@ function articleSeo(array $post, string $basePath, string $siteName): array
     ];
 }
 
-function renderHeader(string $title, string $description, array $seo = [], string $pageStyle = "listing"): void
+function renderHeader(string $title, string $description, array $seo = [], string $pageStyle = "listing", array $extraStyles = []): void
 {
     global $basePath;
 
@@ -156,6 +163,11 @@ function renderHeader(string $title, string $description, array $seo = [], strin
     }
     if ($pageStyle === "article") {
         $stylesheets[] = "article.css";
+    }
+    foreach ($extraStyles as $sheet) {
+        if (is_string($sheet) && $sheet !== "" && !in_array($sheet, $stylesheets, true)) {
+            $stylesheets[] = $sheet;
+        }
     }
     ?>
 <!DOCTYPE html>
@@ -227,7 +239,7 @@ function renderBrandMark(string $basePath, string $siteName, ?string $href = nul
     <?php
 }
 
-function renderFooter(): void
+function renderFooter(array $extraScripts = []): void
 {
     global $basePath, $siteName, $siteFooterTagline;
     ?>
@@ -241,6 +253,11 @@ function renderFooter(): void
     </div>
 </footer>
 <script src="<?= e(scriptUrl("theme.js", $basePath)) ?>" defer></script>
+<?php foreach ($extraScripts as $script): ?>
+<?php if (is_string($script) && $script !== ""): ?>
+<script src="<?= e(scriptUrl($script, $basePath)) ?>" defer></script>
+<?php endif; ?>
+<?php endforeach; ?>
 </body>
 </html>
 <?php
@@ -338,14 +355,20 @@ function renderHome(string $basePath, string $siteName, string $siteHomeTitle, s
         </div>
         <div class="grid">
         <?php foreach ($software as $item): ?>
+            <?php
+            $isExternal = strpos($item["path"], "http") === 0;
+            $itemHref = $isExternal ? $item["path"] : url($item["path"], $basePath);
+            $itemTarget = $isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+            $itemImg = strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath);
+            ?>
             <article class="card col-6">
-                <a href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($item["title"]) ?>">
+                <a href="<?= e($itemHref) ?>"<?= $itemTarget ?> aria-label="<?= e($item["title"]) ?>">
                     <div class="img-wrap">
-                        <img src="<?= e(strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath)) ?>" alt="<?= e($item["title"]) ?>" width="640" height="360" loading="lazy" decoding="async">
+                        <img src="<?= e($itemImg) ?>" alt="<?= e($item["title"]) ?>" width="640" height="360" loading="lazy" decoding="async">
                     </div>
                 </a>
                 <div class="card-content">
-                    <h3><a class="card-link" href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer"><?= e($item["title"]) ?></a></h3>
+                    <h3><a class="card-link" href="<?= e($itemHref) ?>"<?= $itemTarget ?>><?= e($item["title"]) ?></a></h3>
                     <p><?= e($item["description"]) ?></p>
                 </div>
             </article>
@@ -370,14 +393,20 @@ function renderSoftwarePage(string $basePath, string $siteName, array $software,
     </section>
     <section class="grid">
         <?php foreach ($software as $item): ?>
+            <?php
+            $isExternal = strpos($item["path"], "http") === 0;
+            $itemHref = $isExternal ? $item["path"] : url($item["path"], $basePath);
+            $itemTarget = $isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+            $itemImg = strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath);
+            ?>
             <article class="card col-6">
-                <a href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($item["title"]) ?>">
+                <a href="<?= e($itemHref) ?>"<?= $itemTarget ?> aria-label="<?= e($item["title"]) ?>">
                     <div class="img-wrap">
-                        <img src="<?= e(strpos($item["image"], "http") === 0 ? $item["image"] : url($item["image"], $basePath)) ?>" alt="<?= e($item["title"]) ?>" width="640" height="360" loading="lazy" decoding="async">
+                        <img src="<?= e($itemImg) ?>" alt="<?= e($item["title"]) ?>" width="640" height="360" loading="lazy" decoding="async">
                     </div>
                 </a>
                 <div class="card-content">
-                    <h3><a class="card-link" href="<?= e($item["path"]) ?>" target="_blank" rel="noopener noreferrer"><?= e($item["title"]) ?></a></h3>
+                    <h3><a class="card-link" href="<?= e($itemHref) ?>"<?= $itemTarget ?>><?= e($item["title"]) ?></a></h3>
                     <p><?= e($item["description"]) ?></p>
                 </div>
             </article>
