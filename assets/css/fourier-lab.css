@@ -1,0 +1,311 @@
+.fourier-lab {
+    margin: 1.4rem 0 1.6rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: linear-gradient(165deg, var(--card-top), var(--card-bottom));
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.fourier-lab-head {
+    padding: 1rem 1.1rem .75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.fourier-lab-head h3 {
+    margin: 0 0 .35rem;
+    font-size: 1.15rem;
+    color: var(--article-strong);
+}
+
+.fourier-lab-head p {
+    margin: 0;
+    color: var(--article-byline);
+    font-size: .92rem;
+}
+
+.fourier-lab-body {
+    padding: 1rem 1.1rem 1.2rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.fourier-controls {
+    display: grid;
+    gap: .85rem;
+}
+
+.fourier-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: .75rem;
+}
+
+.fourier-field label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--article-strong);
+    margin-bottom: .3rem;
+}
+
+.fourier-field select,
+.fourier-field input[type="number"],
+.fourier-field input[type="text"],
+.fourier-field textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: .55rem;
+    background: var(--table-surface);
+    color: var(--article-text);
+    padding: .45rem .6rem;
+    font: inherit;
+}
+
+.fourier-field textarea {
+    min-height: 4.2rem;
+    resize: vertical;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: .85rem;
+}
+
+.fourier-field input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent-2, #30d5c8);
+}
+
+.fourier-hint {
+    margin: .25rem 0 0;
+    font-size: .78rem;
+    color: var(--article-byline);
+}
+
+.fourier-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem;
+}
+
+.fourier-btn {
+    border: 1px solid var(--border);
+    border-radius: .65rem;
+    background: var(--btn-muted-bg);
+    color: var(--btn-muted-text);
+    padding: .45rem .85rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.fourier-btn-primary {
+    background: color-mix(in srgb, var(--accent-2) 28%, transparent);
+    border-color: color-mix(in srgb, var(--accent-2) 55%, var(--border));
+    color: var(--article-strong);
+}
+
+.fourier-plots {
+    display: grid;
+    gap: .85rem;
+}
+
+@media (min-width: 820px) {
+    .fourier-plots {
+        grid-template-columns: 1.15fr .85fr;
+    }
+}
+
+.fourier-plot {
+    border: 1px solid var(--border);
+    border-radius: .85rem;
+    background: rgba(0, 0, 0, .22);
+    padding: .55rem .55rem .45rem;
+}
+
+[data-theme="light"] .fourier-plot {
+    background: rgba(18, 20, 32, .05);
+}
+
+.fourier-plot h4 {
+    margin: 0 0 .4rem;
+    font-size: .88rem;
+    color: var(--article-strong);
+}
+
+.fourier-plot canvas {
+    display: block;
+    width: 100%;
+    height: 220px;
+    border-radius: .45rem;
+}
+
+.fourier-plot p {
+    margin: .4rem 0 0;
+    font-size: .78rem;
+    color: var(--article-byline);
+}
+
+.fourier-eq-box {
+    border: 1px solid var(--border);
+    border-radius: .75rem;
+    padding: .7rem .85rem;
+    background: var(--table-surface);
+}
+
+.fourier-eq-box .label {
+    display: block;
+    font-size: .72rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--article-byline);
+    margin-bottom: .3rem;
+}
+
+.fourier-eq-box code {
+    display: block;
+    font-size: .86rem;
+    color: var(--article-strong);
+    word-break: break-word;
+    line-height: 1.45;
+}
+
+.fourier-terms {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .82rem;
+}
+
+.fourier-terms th,
+.fourier-terms td {
+    border: 1px solid var(--table-cell-border);
+    padding: .35rem .45rem;
+    text-align: center;
+    color: var(--table-cell-text);
+}
+
+.fourier-terms th {
+    background: var(--table-head-bg);
+    color: var(--table-head-text);
+}
+
+.fourier-terms input {
+    width: 100%;
+    max-width: 5.5rem;
+    border: 1px solid var(--border);
+    border-radius: .35rem;
+    background: transparent;
+    color: inherit;
+    padding: .2rem .3rem;
+    text-align: center;
+    font: inherit;
+}
+
+.fourier-warn {
+    margin: 0;
+    font-size: .82rem;
+    color: var(--article-byline);
+}
+
+.fourier-toc {
+    margin: 0 0 1.4rem;
+    padding: .9rem 1rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: .85rem;
+    background: var(--table-surface);
+    scroll-margin-top: 5rem;
+}
+
+.article h2[id],
+#fourier-lab {
+    scroll-margin-top: 5rem;
+}
+
+.fourier-toc-title {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--article-strong);
+    font-size: .95rem;
+}
+
+.fourier-toc-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    columns: 1;
+    gap: 1.5rem;
+}
+
+@media (min-width: 720px) {
+    .fourier-toc-list {
+        columns: 2;
+    }
+}
+
+.fourier-toc-list li {
+    break-inside: avoid;
+    margin: .2rem 0;
+    color: var(--article-text);
+    font-size: .9rem;
+}
+
+.fourier-toc-list a {
+    color: var(--accent-2, #30d5c8);
+    text-decoration: none;
+}
+
+.fourier-toc-list a:hover {
+    text-decoration: underline;
+}
+
+.fourier-back {
+    margin: .65rem 0 0;
+    font-size: .85rem;
+}
+
+.fourier-back a {
+    color: var(--accent-2, #30d5c8);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.fourier-back a:hover {
+    text-decoration: underline;
+}
+
+.fourier-help {
+    border: 1px solid var(--border);
+    border-radius: .75rem;
+    padding: .75rem .85rem;
+    background: var(--table-surface);
+}
+
+.fourier-help h4 {
+    margin: 0 0 .45rem;
+    font-size: .95rem;
+    color: var(--article-strong);
+}
+
+.fourier-help p {
+    margin: 0 0 .35rem;
+    font-size: .86rem;
+    color: var(--article-text);
+    line-height: 1.45;
+}
+
+.fourier-help p:last-child {
+    margin-bottom: 0;
+}
+
+.fourier-demo-grid {
+    display: grid;
+    gap: .85rem;
+    margin: 1rem 0 1.2rem;
+}
+
+@media (min-width: 720px) {
+    .fourier-demo-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.fourier-demo-grid .fourier-plot canvas {
+    height: 180px;
+}

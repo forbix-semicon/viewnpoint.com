@@ -619,8 +619,6 @@ function vp_render_comments(array $post, string $basePath): void
                     </article>
                 <?php endforeach; ?>
             </div>
-        <?php else: ?>
-            <p class="comments-empty">No approved comments yet. Be the first to share a view.</p>
         <?php endif; ?>
 
         <?php if ($user && ($user["status"] ?? "") === "active"): ?>

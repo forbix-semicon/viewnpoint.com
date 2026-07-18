@@ -6,6 +6,24 @@ declare(strict_types=1);
  */
 return [
     [
+        "slug" => "fourier-transform-explained-hands-on-lab",
+        "title" => "Fourier Transform Explained: See Waves Inside Any Signal",
+        "path" => "/fourier-transform-explained-hands-on-lab",
+        "excerpt" => "A plain-English walk through Fourier series and transforms, with live graphs you can drive yourself.",
+        "snapshot" => "Interactive Fourier lab: pick a square, saw, or custom mix, set harmonics, and watch time and frequency plots update.",
+        "image" => "/blog/fourier-transform-explained-hands-on-lab.jpg",
+        "readTime" => "14 min read",
+        "published" => "2026-07-18",
+        "author" => "Leila Okonkwo",
+        "heroBadge" => "Signals & Math",
+        "heroSubheading" => "Any messy wave is just sines stacked together. Change the inputs and watch the stack rebuild live.",
+        "seoDescription" => "Fourier transform explained in easy English with interactive graphs: Fourier series, frequency spectrum, square and sawtooth waves, custom harmonic inputs, and labeled X-Y axes.",
+        "keywords" => "Fourier transform explained, Fourier series interactive, frequency spectrum graph, square wave Fourier, sine wave harmonics, Fourier transform lab, what is Fourier transform",
+        "styles" => ["fourier-lab.css"],
+        "scripts" => ["fourier-lab.js"],
+        "hideHeroImage" => true,
+    ],
+    [
         "slug" => "hearing-frequency-and-biological-age",
         "title" => "Hearing Frequency and Biological Age: What Your Ears Reveal",
         "path" => "/hearing-frequency-and-biological-age",
