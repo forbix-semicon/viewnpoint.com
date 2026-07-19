@@ -481,7 +481,6 @@
         }
 
         var maxN = Math.max(terms, 1);
-        var barW = Math.max(4, (box.plotW / (maxN + 1)) * 0.55);
 
         ctx.fillStyle = colors.muted;
         ctx.font = "10px sans-serif";
@@ -508,8 +507,13 @@
             var x = pad.l + (m.n / (maxN + 1)) * box.plotW;
             var barH = (m.mag / maxMag) * box.plotH;
             var y = pad.t + box.plotH - barH;
-            ctx.fillStyle = colors.accent;
-            ctx.fillRect(x - barW / 2, y, barW, barH);
+            ctx.strokeStyle = colors.accent;
+            ctx.lineWidth = 1.25;
+            ctx.lineCap = "butt";
+            ctx.beginPath();
+            ctx.moveTo(x, pad.t + box.plotH);
+            ctx.lineTo(x, y);
+            ctx.stroke();
 
             ctx.fillStyle = colors.muted;
             ctx.textAlign = "center";

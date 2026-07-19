@@ -29,7 +29,15 @@ function blogPostBodyHtml(array $post): string
         return "<p>Article content is not available.</p>";
     }
 
-    return vp_parsedown()->text($markdown);
+    $html = vp_parsedown()->text($markdown);
+
+    // Root-relative /blog/... images need the subdirectory base path (e.g. /viewnpoint.com).
+    global $basePath;
+    if (is_string($basePath) && $basePath !== "" && $basePath !== "/") {
+        $html = preg_replace('#\bsrc="(/blog/[^"]+)"#', 'src="' . $basePath . '$1"', $html) ?? $html;
+    }
+
+    return $html;
 }
 
 function findBlogPostByPath(array $blogPosts, string $path): ?array

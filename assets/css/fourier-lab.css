@@ -227,23 +227,37 @@
 }
 
 .fourier-toc-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .15rem 1rem;
     margin: 0;
     padding-left: 1.2rem;
-    columns: 1;
-    gap: 1.5rem;
+    list-style-position: outside;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 520px) {
     .fourier-toc-list {
-        columns: 2;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 780px) {
+    .fourier-toc-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 980px) {
+    .fourier-toc-list {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
 
 .fourier-toc-list li {
-    break-inside: avoid;
     margin: .2rem 0;
     color: var(--article-text);
     font-size: .9rem;
+    min-width: 0;
 }
 
 .fourier-toc-list a {

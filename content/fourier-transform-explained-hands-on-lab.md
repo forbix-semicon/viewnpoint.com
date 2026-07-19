@@ -1,7 +1,7 @@
 <nav id="fourier-toc" class="fourier-toc" aria-label="Table of contents">
 <strong class="fourier-toc-title">On this page</strong>
 <ol class="fourier-toc-list">
-<li><a href="#fourier-lab">Fourier series lab</a></li>
+<li><a href="#fourier-lab">Fourier series calculator</a></li>
 <li><a href="#what-is-ft">What is a Fourier transform?</a></li>
 <li><a href="#series-vs-transform">Series vs transform</a></li>
 <li><a href="#read-graphs">How to read the graphs</a></li>
@@ -17,14 +17,14 @@
 <li><a href="#cheat-sheet">Cheat sheet</a></li>
 <li><a href="#try-inputs">Try these inputs</a></li>
 <li><a href="#real-life">Real life</a></li>
-<li><a href="#honesty">Honesty check</a></li>
+<li><a href="#honesty">Limits of finite harmonics</a></li>
 <li><a href="#sources">Sources</a></li>
 </ol>
 </nav>
 
 <div id="fourier-lab" class="fourier-lab">
 <div class="fourier-lab-head">
-<h3>Fourier series lab</h3>
+<h3>Fourier series online calculator</h3>
 <p>Pick a shape, set harmonics, or type coefficients. Watch time and frequency plots update.</p>
 </div>
 <div class="fourier-lab-body" id="fourier-lab-app">
@@ -59,7 +59,7 @@
 </div>
 <div class="fourier-actions">
 <button type="button" class="fourier-btn fourier-btn-primary" data-apply>Apply equation</button>
-<button type="button" class="fourier-btn" data-reset>Reset lab</button>
+<button type="button" class="fourier-btn" data-reset>Reset calculator</button>
 </div>
 <div class="fourier-eq-box">
 <span class="label">Built series</span>
@@ -67,7 +67,7 @@
 </div>
 </div>
 <div class="fourier-help" id="lab-controls">
-<h4>What each lab control means</h4>
+<h4>What each calculator control means</h4>
 <p><strong>Wave shape</strong> picks the target recipe. Square, saw, triangle, or your mix.</p>
 <p>Shape decides which harmonics are allowed, and the starting aₙ / bₙ values.</p>
 <p><strong>Harmonics N</strong> is how many terms you keep in the sum.</p>
@@ -123,7 +123,7 @@
 <h2 id="series-vs-transform">Fourier series vs Fourier transform</h2>
 <p>People mix these names. They are cousins, not twins.</p>
 <div class="table-card"><h3 class="table-title">Quick map</h3><div class="table-wrap"><table><thead><tr><th>Idea</th><th>Best for</th><th>What you get</th></tr></thead><tbody><tr><td>Fourier series</td><td>Repeating waves</td><td>Sum of sines and cosines</td></tr><tr><td>Fourier transform</td><td>One-off or long signals</td><td>A continuous spectrum</td></tr><tr><td>DFT / FFT</td><td>Computer samples</td><td>Discrete frequency bins</td></tr></tbody></table></div></div>
-<p>This lab draws a Fourier series. That is the hands-on cousin.</p>
+<p>This calculator draws a Fourier series. That is the hands-on cousin.</p>
 <p>If a wave repeats forever, a series can rebuild it from harmonics.</p>
 <p>The transform generalizes the same idea beyond neat periods.</p>
 <p class="fourier-back"><a href="#fourier-toc">↑ Top / Index</a></p>
@@ -157,7 +157,7 @@
 <hr class="section-break">
 
 <h2 id="built-series">What the “Built series” line means</h2>
-<p>The lab prints a live sum. It might look like this:</p>
+<p>The calculator prints a live sum. It might look like this:</p>
 <p><code>f(t) ≈ 1.273·sin(1ωt) +0.424·sin(3ωt) +0.255·sin(5ωt) +…</code></p>
 <p>Read it left to right. f(t) is the wave height at time t.</p>
 <p>The ≈ sign means “close enough with N terms,” not perfect forever.</p>
@@ -200,7 +200,7 @@
 <p><code>f(t) = A · sin(ωt)</code></p>
 <p>So b₁ = A, and every other aₙ, bₙ is zero.</p>
 <p>Spectrum: one bar at f₀. Time plot: one smooth curve. Done.</p>
-<p>In the lab, use Custom: <code>b1=1</code> and set N = 1.</p>
+<p>In the calculator, use Custom: <code>b1=1</code> and set N = 1.</p>
 <div class="fourier-demo-grid">
 <div class="fourier-plot">
 <h4>Sine — time domain</h4>
@@ -224,7 +224,7 @@
 <p>In coefficient language: bₙ = 4A/(πn) for odd n. Else bₙ = 0.</p>
 <p>aₙ = 0 for all n in this odd square setup.</p>
 <p>More odd terms → flatter tops, sharper jumps, tiny Gibbs ripples.</p>
-<p>Lab: Shape = Square. Raise N. Watch odd bars grow on the right plot.</p>
+<p>Calculator: Shape = Square. Raise N. Watch odd bars grow on the right plot.</p>
 <div class="fourier-demo-grid">
 <div class="fourier-plot">
 <h4>Square — time domain</h4>
@@ -248,7 +248,7 @@
 <p><code>f(t) ≈ (2A/π) · [sin(ωt) − (1/2)sin(2ωt) + (1/3)sin(3ωt) − …]</code></p>
 <p>Or: bₙ = (2A/(πn)) · (−1)<sup>n+1</sup>.</p>
 <p>Spectrum is denser than a square. Every integer multiple of f₀ shows up.</p>
-<p>Lab: Shape = Sawtooth. Compare the bar chart to Square’s odd-only pattern.</p>
+<p>Calculator: Shape = Sawtooth. Compare the bar chart to Square’s odd-only pattern.</p>
 <div class="fourier-demo-grid">
 <div class="fourier-plot">
 <h4>Sawtooth — time domain</h4>
@@ -272,7 +272,7 @@
 <p><code>f(t) ≈ (8A/π²) · [sin(ωt) − (1/9)sin(3ωt) + (1/25)sin(5ωt) − …]</code></p>
 <p>For odd n: bₙ = ±8A/(π² n²). Signs alternate in a fixed pattern.</p>
 <p>You need fewer terms to look “good.” Corners are gentler by design.</p>
-<p>Lab: Shape = Triangle. Notice how high-n bars stay tiny.</p>
+<p>Calculator: Shape = Triangle. Notice how high-n bars stay tiny.</p>
 <div class="fourier-demo-grid">
 <div class="fourier-plot">
 <h4>Triangle — time domain</h4>
@@ -296,7 +296,7 @@
 <p><code>f(t) ≈ A D + Σ 2 A D · sinc(n D) · cos(nωt)</code></p>
 <p>Here sinc(x) = sin(πx)/(πx). Narrow D spreads the spectrum wider.</p>
 <p>Figures below use D = 0.25 (on for a quarter of each period).</p>
-<p>Lab tip: build a similar mix with Custom aₙ values and compare.</p>
+<p>Calculator tip: build a similar mix with Custom aₙ values and compare.</p>
 <div class="fourier-demo-grid">
 <div class="fourier-plot">
 <h4>Pulse — time domain</h4>
@@ -319,7 +319,7 @@
 <p class="fourier-back"><a href="#fourier-toc">↑ Top / Index</a></p>
 <hr class="section-break">
 
-<h2 id="try-inputs">Try these inputs in the lab</h2>
+<h2 id="try-inputs">Try these inputs in the calculator</h2>
 <ul>
 <li>Shape: Square. N: 1 → 3 → 15. Spot the ringing near jumps.</li>
 <li>Shape: Sawtooth. Even harmonics appear. The spectrum fills in.</li>
@@ -340,13 +340,13 @@
 <p class="fourier-back"><a href="#fourier-toc">↑ Top / Index</a></p>
 <hr class="section-break">
 
-<h2 id="honesty">A small honesty check</h2>
+<h2 id="honesty">Limits of finite harmonics</h2>
 <p>Infinite terms can match many periodic targets exactly.</p>
 <p>Finite N is always an approximation. That is fine for learning.</p>
 <p>Jump discontinuities keep tiny ripples. That is the Gibbs effect.</p>
 <p>Real FFT work also fights noise, windows, and sample rate limits.</p>
 <p>Use this page to build intuition. Use a textbook for proofs.</p>
-<p>— <strong>Leila Okonkwo</strong><br>signals lab notes, rewritten for humans</p>
+<p>— <strong>Leila Okonkwo</strong><br>signals notes, rewritten for humans</p>
 <p class="fourier-back"><a href="#fourier-toc">↑ Top / Index</a></p>
 <hr class="section-break">
 

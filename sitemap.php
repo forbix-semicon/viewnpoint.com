@@ -26,6 +26,12 @@ $pages = [
         "priority" => "0.8",
     ],
     [
+        "loc" => $siteUrl . "/gear-types-ratios-online-calculator",
+        "lastmod" => "2026-07-18",
+        "changefreq" => "monthly",
+        "priority" => "0.9",
+    ],
+    [
         "loc" => $siteUrl . "/fourier-transform-explained-hands-on-lab",
         "lastmod" => "2026-07-18",
         "changefreq" => "monthly",
