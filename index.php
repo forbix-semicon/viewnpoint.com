@@ -19,6 +19,7 @@ if ($requestPath === "//" || $requestPath === "") {
 
 require_once __DIR__ . "/comments/bootstrap.php";
 require_once __DIR__ . "/includes/blog.php";
+require_once __DIR__ . "/includes/static-pages.php";
 
 $software = [
     [
@@ -250,6 +251,11 @@ function renderFooter(array $extraScripts = []): void
             <?= e($siteFooterTagline) ?>
             · <a class="footer-link" href="https://www.forbixindia.com" rel="noopener noreferrer">FORBIX SEMICON</a>
         </p>
+        <p class="footer-links">
+            <a class="footer-link" href="<?= e(url("/about", $basePath)) ?>">About</a>
+            <a class="footer-link" href="<?= e(url("/contact", $basePath)) ?>">Contact</a>
+            <a class="footer-link" href="<?= e(url("/privacy", $basePath)) ?>">Privacy</a>
+        </p>
     </div>
 </footer>
 <script src="<?= e(scriptUrl("theme.js", $basePath)) ?>" defer></script>
@@ -307,9 +313,11 @@ function renderNav(string $basePath, string $requestPath, string $siteName): voi
                 <span class="theme-icon" aria-hidden="true">☾</span>
             </label>
             <nav>
-                <a class="<?= isActive($requestPath, "/") && !isActive($requestPath, "/blog") && !isActive($requestPath, "/tech") && !isActive($requestPath, "/software") ? "active" : "" ?>" href="<?= e(url("/", $basePath)) ?>">Home</a>
+                <a class="<?= isActive($requestPath, "/") && !isActive($requestPath, "/blog") && !isActive($requestPath, "/tech") && !isActive($requestPath, "/software") && !isActive($requestPath, "/about") && !isActive($requestPath, "/contact") && !isActive($requestPath, "/privacy") ? "active" : "" ?>" href="<?= e(url("/", $basePath)) ?>">Home</a>
                 <a class="<?= isActive($requestPath, "/blog") ? "active" : "" ?>" href="<?= e(url("/blog", $basePath)) ?>">Blog</a>
                 <a class="<?= isActive($requestPath, "/tech") || isActive($requestPath, "/software") ? "active" : "" ?>" href="<?= e(url("/tech", $basePath)) ?>">Technology</a>
+                <a class="<?= isActive($requestPath, "/about") ? "active" : "" ?>" href="<?= e(url("/about", $basePath)) ?>">About</a>
+                <a class="<?= isActive($requestPath, "/contact") ? "active" : "" ?>" href="<?= e(url("/contact", $basePath)) ?>">Contact</a>
             </nav>
         </div>
     </div>
@@ -478,6 +486,21 @@ if ($requestPath === "/tech" || $requestPath === "/software") {
 
 if ($requestPath === "/blog") {
     renderBlogPage($basePath, $siteName, $blogPosts, $requestPath);
+    exit;
+}
+
+if ($requestPath === "/about") {
+    renderAboutPage($basePath, $siteName, $requestPath);
+    exit;
+}
+
+if ($requestPath === "/privacy") {
+    renderPrivacyPage($basePath, $siteName, $requestPath);
+    exit;
+}
+
+if ($requestPath === "/contact") {
+    renderContactPage($basePath, $siteName, $requestPath);
     exit;
 }
 

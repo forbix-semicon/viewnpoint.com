@@ -30,6 +30,7 @@ define("VP_COMMENT_DB", __DIR__ . "/../db/viewnpoint_comments.sqlite");
 define("VP_COMMENT_BACKUP_DB", __DIR__ . "/../db/viewnpoint_comments_backup.sqlite");
 define("VP_USERS_CSV", __DIR__ . "/../db/viewnpoint_users.csv");
 define("VP_COMMENTS_CSV", __DIR__ . "/../db/viewnpoint_comments.csv");
+define("VP_CONTACT_CSV", __DIR__ . "/../db/viewnpoint_contact_messages.csv");
 define("VP_ADMIN_USERNAME", (string) $vpCommentsConfig["admin_username"]);
 define("VP_ADMIN_EMAIL", (string) $vpCommentsConfig["admin_email"]);
 define("VP_ADMIN_PASSWORD", (string) $vpCommentsConfig["admin_password"]);
@@ -342,6 +343,23 @@ function vp_comments_install(PDO $pdo): void
         )"
     );
 
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS contact_messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            subject TEXT NOT NULL DEFAULT '',
+            message TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'new',
+            ip_address TEXT,
+            user_agent TEXT,
+            created_at TEXT NOT NULL,
+            handled_at TEXT,
+            handled_by INTEGER,
+            FOREIGN KEY (handled_by) REFERENCES users(id)
+        )"
+    );
+
     vp_comments_migrate_users_oauth($pdo);
 
     $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :username OR email = :email LIMIT 1");
@@ -513,6 +531,46 @@ function vp_comments_users_for_admin(): array
     return $stmt->fetchAll();
 }
 
+/**
+ * @param array{name:string,email:string,subject?:string,message:string} $data
+ */
+function vp_contact_save_message(array $data): int
+{
+    $stmt = vp_comments_db()->prepare(
+        "INSERT INTO contact_messages
+            (name, email, subject, message, status, ip_address, user_agent, created_at)
+         VALUES
+            (:name, :email, :subject, :message, 'new', :ip_address, :user_agent, :created_at)"
+    );
+    $stmt->execute([
+        ":name" => trim($data["name"]),
+        ":email" => trim($data["email"]),
+        ":subject" => trim((string) ($data["subject"] ?? "")),
+        ":message" => trim($data["message"]),
+        ":ip_address" => substr((string) ($_SERVER["REMOTE_ADDR"] ?? ""), 0, 64),
+        ":user_agent" => substr((string) ($_SERVER["HTTP_USER_AGENT"] ?? ""), 0, 255),
+        ":created_at" => gmdate("c"),
+    ]);
+
+    $id = (int) vp_comments_db()->lastInsertId();
+    vp_comments_backup();
+
+    return $id;
+}
+
+function vp_contact_messages_for_admin(): array
+{
+    $stmt = vp_comments_db()->query(
+        "SELECT *
+         FROM contact_messages
+         ORDER BY
+            CASE status WHEN 'new' THEN 0 WHEN 'read' THEN 1 ELSE 2 END,
+            created_at DESC"
+    );
+
+    return $stmt->fetchAll();
+}
+
 function vp_comments_log(int $adminId, string $targetType, int $targetId, string $action, string $note = ""): void
 {
     $stmt = vp_comments_db()->prepare(
@@ -547,6 +605,13 @@ function vp_comments_backup(): void
          FROM comments c
          JOIN users u ON u.id = c.user_id
          ORDER BY c.id ASC"
+    );
+    vp_comments_export_csv(
+        VP_CONTACT_CSV,
+        ["id", "name", "email", "subject", "message", "status", "ip_address", "created_at", "handled_at", "handled_by"],
+        "SELECT id, name, email, subject, message, status, ip_address, created_at, handled_at, handled_by
+         FROM contact_messages
+         ORDER BY id ASC"
     );
 }
 

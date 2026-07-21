@@ -26,6 +26,24 @@ $pages = [
         "priority" => "0.8",
     ],
     [
+        "loc" => $siteUrl . "/about",
+        "lastmod" => "2026-07-20",
+        "changefreq" => "yearly",
+        "priority" => "0.6",
+    ],
+    [
+        "loc" => $siteUrl . "/contact",
+        "lastmod" => "2026-07-20",
+        "changefreq" => "yearly",
+        "priority" => "0.6",
+    ],
+    [
+        "loc" => $siteUrl . "/privacy",
+        "lastmod" => "2026-07-20",
+        "changefreq" => "yearly",
+        "priority" => "0.5",
+    ],
+    [
         "loc" => $siteUrl . "/gear-types-ratios-online-calculator",
         "lastmod" => "2026-07-18",
         "changefreq" => "monthly",

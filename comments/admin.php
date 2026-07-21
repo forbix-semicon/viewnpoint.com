@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $commentId = (int) ($_POST["comment_id"] ?? 0);
         $userId = (int) ($_POST["user_id"] ?? 0);
+        $contactId = (int) ($_POST["contact_id"] ?? 0);
 
         if (in_array($action, ["approve", "disapprove", "delete"], true) && $commentId > 0) {
             $status = [
@@ -55,6 +56,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             vp_comments_log((int) $admin["id"], "comment", $commentId, $action);
             vp_comments_backup();
             vp_comments_flash("Comment " . $status . ".", "success");
+        } elseif (in_array($action, ["contact_read", "contact_delete"], true) && $contactId > 0) {
+            if ($action === "contact_delete") {
+                $stmt = vp_comments_db()->prepare("DELETE FROM contact_messages WHERE id = :id");
+                $stmt->execute([":id" => $contactId]);
+                vp_comments_log((int) $admin["id"], "contact", $contactId, "delete");
+                vp_comments_flash("Contact message deleted.", "success");
+            } else {
+                $stmt = vp_comments_db()->prepare(
+                    "UPDATE contact_messages
+                     SET status = 'read', handled_at = :handled_at, handled_by = :handled_by
+                     WHERE id = :id"
+                );
+                $stmt->execute([
+                    ":handled_at" => gmdate("c"),
+                    ":handled_by" => (int) $admin["id"],
+                    ":id" => $contactId,
+                ]);
+                vp_comments_log((int) $admin["id"], "contact", $contactId, "read");
+                vp_comments_flash("Contact message marked as read.", "success");
+            }
+            vp_comments_backup();
         } elseif (in_array($action, ["block", "unblock"], true) && $userId > 0) {
             if ($userId === (int) $admin["id"]) {
                 throw new RuntimeException("You cannot block your own admin account.");
@@ -87,8 +109,9 @@ $isAdmin = vp_comments_is_admin($admin);
 $flash = vp_comments_take_flash();
 $comments = $isAdmin ? vp_comments_recent_for_admin() : [];
 $users = $isAdmin ? vp_comments_users_for_admin() : [];
+$contactMessages = $isAdmin ? vp_contact_messages_for_admin() : [];
 
-function admin_action_button(string $label, string $action, int $commentId = 0, int $userId = 0): void
+function admin_action_button(string $label, string $action, int $commentId = 0, int $userId = 0, int $contactId = 0): void
 {
     ?>
     <form method="post" style="display:inline">
@@ -100,6 +123,9 @@ function admin_action_button(string $label, string $action, int $commentId = 0, 
         <?php if ($userId > 0): ?>
             <input type="hidden" name="user_id" value="<?= $userId ?>">
         <?php endif; ?>
+        <?php if ($contactId > 0): ?>
+            <input type="hidden" name="contact_id" value="<?= $contactId ?>">
+        <?php endif; ?>
         <button type="submit"><?= vp_comments_h($label) ?></button>
     </form>
     <?php
@@ -110,7 +136,7 @@ function admin_action_button(string $label, string $action, int $commentId = 0, 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Comment Moderation | ViewNPoint</title>
+    <title>Moderation | ViewNPoint</title>
     <style>
         body { margin: 0; font-family: Arial, sans-serif; background: #f5f7fb; color: #151827; }
         .wrap { width: min(1180px, calc(100% - 2rem)); margin: 2rem auto; }
@@ -133,7 +159,7 @@ function admin_action_button(string $label, string $action, int $commentId = 0, 
 </head>
 <body>
 <main class="wrap">
-    <h1>ViewNPoint Comment Moderation</h1>
+    <h1>ViewNPoint Moderation</h1>
     <p><a class="link" href="<?= vp_comments_h(($basePath === "" ? "" : $basePath) . "/blog") ?>">Back To Blog</a></p>
 
     <?php if ($flash): ?>
@@ -164,6 +190,50 @@ function admin_action_button(string $label, string $action, int $commentId = 0, 
                 <input type="hidden" name="csrf" value="<?= vp_comments_h(vp_comments_csrf()) ?>">
                 <button type="submit" name="action" value="logout">Logout</button>
             </form>
+        </section>
+
+        <section class="panel">
+            <h2>Contact messages</h2>
+            <p class="muted">Entries from the public Contact form. Mark as read after you handle them.</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Status</th>
+                            <th>From</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($contactMessages as $msg): ?>
+                        <tr>
+                            <td><?= (int) $msg["id"] ?></td>
+                            <td><span class="status"><?= vp_comments_h((string) $msg["status"]) ?></span></td>
+                            <td>
+                                <?= vp_comments_h((string) $msg["name"]) ?><br>
+                                <span class="muted"><?= vp_comments_h((string) $msg["email"]) ?></span>
+                            </td>
+                            <td><?= vp_comments_h((string) ($msg["subject"] !== "" ? $msg["subject"] : "(none)")) ?></td>
+                            <td><?= nl2br(vp_comments_h((string) $msg["message"])) ?></td>
+                            <td><?= vp_comments_h((string) $msg["created_at"]) ?></td>
+                            <td>
+                                <?php if (($msg["status"] ?? "") === "new"): ?>
+                                    <?php admin_action_button("Mark read", "contact_read", 0, 0, (int) $msg["id"]); ?>
+                                <?php endif; ?>
+                                <span class="danger"><?php admin_action_button("Delete", "contact_delete", 0, 0, (int) $msg["id"]); ?></span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php if (!$contactMessages): ?>
+                        <tr><td colspan="7">No contact messages yet.</td></tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
         <section class="panel">

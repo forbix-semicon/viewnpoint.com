@@ -1,0 +1,71 @@
+.contact-form {
+    margin: 1.2rem 0 1.5rem;
+    display: grid;
+    gap: .9rem;
+    max-width: 36rem;
+}
+
+.contact-field label {
+    display: block;
+    margin-bottom: .35rem;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--article-strong, var(--text));
+}
+
+.contact-optional {
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: .7rem .8rem;
+    border: 1px solid var(--border);
+    border-radius: .7rem;
+    background: var(--table-surface, var(--surface));
+    color: var(--text);
+    font: inherit;
+}
+
+.contact-field textarea {
+    resize: vertical;
+    min-height: 8rem;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+    outline: 2px solid var(--accent-2, #30d5c8);
+    outline-offset: 1px;
+}
+
+.contact-honeypot {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+    overflow: hidden;
+}
+
+.contact-status {
+    margin: 0;
+    padding: .7rem .85rem;
+    border-radius: .7rem;
+    font-size: .92rem;
+}
+
+.contact-status.is-ok {
+    background: rgba(34, 140, 80, .14);
+    color: var(--article-strong, var(--text));
+}
+
+.contact-status.is-err {
+    background: rgba(180, 50, 50, .14);
+    color: var(--article-strong, var(--text));
+}
+
+.contact-form .btn[disabled] {
+    opacity: .65;
+    cursor: wait;
+}

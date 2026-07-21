@@ -272,7 +272,19 @@ footer {
     text-decoration: underline;
 }
 
+.footer-links {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem 1rem;
+}
+
 @media (max-width: 900px) {
     .topbar { flex-wrap: wrap; padding: .6rem 0; }
     .topbar-actions { width: 100%; justify-content: space-between; }
+    .topbar-actions nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .35rem .75rem;
+    }
 }
